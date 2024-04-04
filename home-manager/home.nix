@@ -47,7 +47,24 @@
     flyctl
     mnemosyne
     anki # may not work no more
-    open-interpreter
+    rescuetime
+    # android-studio-canary
+    #vlc
+    #open-interpreter
+
+    #slack
+    #discord / discordo
+    #obsidian
+    #dropbox
+    #steam
+    #slack-term
+    #warp.dev
+    #deno / bun /
+    #GO
+    # gnomecast
+    # hyprland
+    # google-chrome
+    #
 	#pkgs.emacs
   ];
   #withpcre2 ripgrep
