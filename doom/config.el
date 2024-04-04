@@ -74,3 +74,123 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(map! "\C-x\C-m" #'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
+(global-set-key "\C-c\m" 'execute-extended-command)
+(global-set-key "\C-x\m" 'execute-extended-command)
+
+;;asdfasdf asdfasd fads fsd
+
+(global-set-key "\C-w" 'backward-kill-word)
+
+;(global-set-key "\C-x\C-k" 'kill-region)
+
+;;(global-set-key "\C-c\C-k" 'kill-region)
+;;ask chatgpt -> combine these so that if i click C-W with a region highlighted then it kills the region
+;;
+
+(defun my-kill-region-or-backward-word ()
+  "If a region is active and non-empty, kill the region. Otherwise, kill the word backward."
+  (interactive)
+  (if (use-region-p)
+      (kill-region (region-beginning) (region-end))
+    (backward-kill-word 1)))
+
+(global-set-key "\C-w" 'my-kill-region-or-backward-word)
+
+
+;;      https://github.com/minad/corfu?tab=readme-ov-file
+
+
+
+;;apheleia for code formatting via prettier https://github.com/radian-software/apheleia
+;;https://github.com/purcell/envrc
+;;add-node-modules-to-path https://github.com/codesuki/add-node-modules-path
+;;js-ts-mode, typescript-ts-mode, tsx-ts-mode via treesit-auto - https://github.com/renzmann/treesit-auto
+;;eglot w/ tsserver
+;;tide mode?
+;;https://emacs-lsp.github.io/lsp-mode/tutorials/reactjs-tutorial/
+;;Emacs 29, tsx-ts-mode, eglot, flymake, flymake-eslint (not eslint-flymake)
+
+;;https://old.reddit.com/r/emacs/comments/thll06/ann_tsxmodeel_a_batteriesincluded_major_mode_for/
+;;I use jtsx-tsx-mode of jtsx package (I wroke it recently) + eglot. - https://github.com/llemaitre19/jtsx
+;;
+;;
+;;https://github.com/doomemacs/doomemacs/issues/6172
+;;
+;;
+;;
+;; (use-package! tsx-mode
+;;   :config
+;;   (setq auto-mode-alist (delete '("\\.tsx\\'" . typescript-tsx-mode) auto-mode-alist))
+;;   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . tsx-mode))
+;;   (set-formatter! 'tsx-prettier '("prettier" "--parser" "typescript") :modes '(tsx-mode)))
+;;https://github.com/doomemacs/doomemacs/issues/6172
+;;https://medium.com/@nedopaka/setup-a-react-vite-project-with-typescript-prettier-vitest-2024-9bb6e919ac8f
+;;
+;;
+;;
+;;
+;;
+;;6:30 - wake up
+;;7:00 must leave house
+;;7:15 get to lifetime
+;;leave lifetime at 8
+;;815
+
+
+
+;;typescript + web
+;;nix
+;;
+;;GO dev
+;;C++ dev
+;;;;android + kotlin ? lol
+
+;https://www.reddit.com/r/emacs/comments/13god8v/how_do_i_improve_emacs_as_a_typescript_ide/
+;;https://www.reddit.com/r/emacs/comments/13z8i1a/typescript_highlighting_in_emacs_incomplete/
+;;https://www.reddit.com/r/emacs/comments/mgbejx/webmacs_new_emacs_configuration_for_web/
+;; (global-set-key [(meta v)] 'revert-buffer-no-confirm) ;
+;; (global-set-key [(meta o)] 'goto-line)
+;; (global-set-key (kbd "M-p") 'iswitchb-buffer)
+;; (global-set-key (kbd "M-i") 'gofmt)
+
+
+;https://news.ycombinator.com/item?id=9600106
+;;https://github.com/WeAreWizards/blog/blob/master/content/articles/ansible-and-nix.md
+;;
+;;
+;;LSP mode - tailwind ??
+;;prettier.js
+
+
+;(add-to-list 'auto-mode-alist '("\\.jsx?$" . rjsx-mode))
+;(add-to-list 'auto-mode-alist '("\\.tsx?$" . typescript-mode))
+
+
+;;; Setup TypeScript Interactive Development Environment
+;; (defun setup-tide-mode ()
+;;   (interactive)
+;;   (tide-setup)
+;;   (flycheck-mode +1)
+;;   (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;;   (eldoc-mode +1)
+;;   (tide-hl-identifier-mode +1)
+;;   (company-mode +1))
+
+;; (add-hook 'typescript-mode-hook #'setup-tide-mode)
+;; (add-hook 'js2-mode-hook #'setup-tide-mode)
+;; (add-hook 'rjsx-mode-hook #'setup-tide-mode)
+
+
+;;init.el
+;:lang
+;;(prettier +onsave)
+;(typescript +lsp)
+;:lang
+;(web +lsp)
+;
+;;;emmet mode?
+;;https://zzamboni.org/post/my-doom-emacs-configuration-with-commentary/
