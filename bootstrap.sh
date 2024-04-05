@@ -14,6 +14,16 @@ print_step() {
 
 print_step "Install Nix"
 
+
+curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
+
+nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz
+nix-channel --update
+
+nix-shell '<home-manager>' -A install
+
+
+
 print_step "sym linking"
 ln -s ~/.config/Dot-files/home-manager ../
 ln -s ~/.config/Dot-files/doom ../

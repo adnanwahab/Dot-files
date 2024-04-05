@@ -33,7 +33,7 @@
     # # environment:
     # (pkgs.writeShellScriptBin "my-hello" ''
     #   echo "Hello, ${config.home.username}!"
-    # '')
+    # sicp.1234.sicp
     binutils
     git
     gnutls
@@ -48,6 +48,10 @@
     mnemosyne
     anki # may not work no more
     rescuetime
+
+
+
+    # dhcp - id address
     # android-studio-canary
     #vlc
     #open-interpreter
