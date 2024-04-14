@@ -17,7 +17,8 @@ print_step() {
 #
 
 git clone https://github.com/adnanwahab/Dot-files
-cd Dot-files
+mv Dot-files ~/.config/
+cd ~/.config/Dot-files
 
 print_step "Install Nix"
 
