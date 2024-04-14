@@ -24,6 +24,8 @@ print_step "Install Nix"
 
 curl -L https://nixos.org/nix/install | sh -s -- --no-daemon
 
+. /home/awahab/.nix-profile/etc/profile.d/nix.sh
+
 nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz
 nix-channel --update
 
@@ -36,6 +38,7 @@ ln -s ~/.config/Dot-files/home-manager ./home-manager/
 
 # git clone doom
 # ./doom/bin/install
+#
 ln -s ~/.config/Dot-files/doom ./doom/
 
 print_step "Everything is settled up, now restart and enjoy your new machine."
