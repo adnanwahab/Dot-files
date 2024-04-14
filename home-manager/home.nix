@@ -1,6 +1,17 @@
-{ config, pkgs, ... }:
+{ config, pkgs, inputs, ... }: {
+#       imports = [ inputs.hyprland-nix.homeManagerModules.default ];
+# wayland.windowManager.hyprland = {
+#         enable = true;
+#         reloadConfig = true;
+#         systemdIntegration = true;
+#         # recommendedEnvironment = false;
+#         # nvidiaPatches = true;
 
-{
+#         config = {
+#             # ...
+#         };
+#         # ...
+#     };
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "adnan";
@@ -17,16 +28,18 @@
 
   # The home.packages option allows you to install Nix packages into your
   # environment.
+  nixpkgs.config.allowUnfree = true;
   home.packages = with pkgs; [
+    # pkgs.hello
     # # Adds the 'hello' command to your environment. It prints a friendly
     # # "Hello, world!" when run.
-    # pkgs.hello
 
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
     # # fonts?
     # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
+
 
     # # You can also create simple shell scripts directly inside your
     # # configuration. For example, this adds a command 'my-hello' to your
@@ -48,7 +61,7 @@
     mnemosyne
     anki # may not work no more
     rescuetime
-
+    jdk17
 
 
     # dhcp - id address
@@ -68,10 +81,14 @@
     # gnomecast
     # hyprland
     # google-chrome
-    #
+    #https://xeiaso.net/talks/nixos-pain-2021-11-10/
 	#pkgs.emacs
   ];
   #withpcre2 ripgrep
+
+    services.tailscale.enable = true;
+    #python -m http.server --bind ::
+
 
   # Home Manager is pretty good at managing dotfiles. The primary way to manage
   # plain files is through 'home.file'.
@@ -109,4 +126,9 @@
 
   # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
+
+  #programs.hyprland.enable = true;
+  # Optional, hint electron apps to use wayland:
+  # environment.sessionVariables.NIXOS_OZONE_WL = "1";
+  # https://community.fly.io/t/running-reproducible-rust-a-fly-and-nix-love-story/3781
 }

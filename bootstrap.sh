@@ -10,7 +10,14 @@ print_step() {
 }
 
 
+# to install
+# curl https://raw.githubusercontent.com/adnanwahab/Dot-files/main/bootstrap.sh | sh
+# curl aw.com/install.sh |  sh
+#
+#
 
+git clone https://github.com/adnanwahab/Dot-files
+cd Dot-files
 
 print_step "Install Nix"
 
@@ -25,7 +32,10 @@ nix-shell '<home-manager>' -A install
 
 
 print_step "sym linking"
-ln -s ~/.config/Dot-files/home-manager ../
-ln -s ~/.config/Dot-files/doom ../
+ln -s ~/.config/Dot-files/home-manager ./home-manager/
+
+# git clone doom
+# ./doom/bin/install
+ln -s ~/.config/Dot-files/doom ./doom/
 
 print_step "Everything is settled up, now restart and enjoy your new machine."
