@@ -14,6 +14,7 @@
 #     };
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
+  #
   home.username = "adnan";
   home.homeDirectory = "/home/adnan";
 
@@ -69,16 +70,18 @@
     #vlc
     #open-interpreter
 
-    #slack
+    slack
     #discord / discordo
-    #obsidian
-    #dropbox
+    obsidian
+    dropbox
+
+
     #steam
     #slack-term
     #warp.dev
     #deno / bun /
     #GO
-    # gnomecast
+    gnomecast
     # hyprland
     # google-chrome
     #https://xeiaso.net/talks/nixos-pain-2021-11-10/
@@ -86,7 +89,7 @@
   ];
   #withpcre2 ripgrep
 
-    services.tailscale.enable = true;
+  #x services.tailscale.enable = true;
     #python -m http.server --bind ::
 
 
@@ -131,4 +134,11 @@
   # Optional, hint electron apps to use wayland:
   # environment.sessionVariables.NIXOS_OZONE_WL = "1";
   # https://community.fly.io/t/running-reproducible-rust-a-fly-and-nix-love-story/3781
+  #
+  nix = {
+    package = pkgs.nix;
+
+    settings.experimental-features = [ "nix-command" "flakes" ];
+      };
+
 }
