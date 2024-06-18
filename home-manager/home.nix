@@ -6,7 +6,6 @@
   home.username = "adnan";
   home.homeDirectory = "/home/adnan";
   home.stateVersion = "23.11";
-
   # The home.packages option allows you to install Nix packages into your
   # environment.
   nixpkgs.config.allowUnfree = true;
@@ -22,13 +21,17 @@
     zstd
     sqlite
     beancount
-    emacs-gtk
+    #emacs-gtk
     flyctl
-    mnemosyne
-    anki
-    rescuetime
+    #mnemosyne
+    #anki # may not work no more
+    #rescuetime
     jdk17
-    slack
+    deploy-rs
+    # dhcp - id address
+    # android-studio-canary
+    #vlc
+    #open-interpreter
     obsidian
     dropbox
     gnomecast
@@ -44,6 +47,21 @@
 
     # Unreal Engine requires some special setup since it's not directly available via Nix packages.
     # You will likely need to manually install it or manage it through another method.
+    #dropbox
+
+    ollama
+    #nix-shell -p python311Packages.litellm
+
+    #steam
+    #slack-term
+    #warp.dev
+    #deno / bun /
+    #GO
+    #gnomecast
+    # hyprland
+    # google-chrome
+    #https://xeiaso.net/talks/nixos-pain-2021-11-10/
+	#pkgs.emacs
   ];
 
   # Optionally add configurations for Prometheus and Grafana
