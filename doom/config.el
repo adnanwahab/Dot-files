@@ -1,3 +1,21 @@
+
+
+;; day9 daily replay analyzer
+
+(global-set-key "\C-w" 'my-kill-region-or-backward-word)
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
+(global-set-key "\C-c\m" 'execute-extended-command)
+(global-set-key (kbd "C-x SPC")
+                (lambda ()
+                  (interactive)
+                  (find-file "~/Documents/fortress_of_solitude/adnan.org")))
+                                        ;//https://github.com/skangas/mentor
+                                        ; Normal Chat / Interpreter Mode
+
+
+
 (require 'gptel) ;; cant read the code on a big system - have to do log experiments - mark of good programmer - figure out how to get it done.
 (gptel-make-ollama "baka"             ;Any name of your choosing
   :host "localhost:11434"               ;Where it's running
@@ -6,22 +24,23 @@
 (setq deft-directory "~/Documents/fortress_of_solitude/")
 (after! deft
   (setq deft-default-extension "org"))
+
 (defvar mydick (lambda (response info)
-     (if (not response)
-         (message "ChatGPT response failed with: %s" (plist-get info :status))
-       (let* ((bounds (plist-get info :context))
-              (beg (car bounds))
-              (end (cdr bounds))
-              (buf (plist-get info :buffer)))
-         (with-current-buffer buf
-           (save-excursion
-             (goto-char beg)
-             (kill-region beg end)
-             (insert response)
-             (set-marker beg nil)
-             (set-marker end nil)
-             (message "Rewrote line. Original line saved to kill-ring.")))))
-     ))
+                (if (not response)
+                    (message "ChatGPT response failed with: %s" (plist-get info :status))
+                  (let* ((bounds (plist-get info :context))
+                         (beg (car bounds))
+                         (end (cdr bounds))
+                         (buf (plist-get info :buffer)))
+                    (with-current-buffer buf
+                      (save-excursion
+                        (goto-char beg)
+                        (kill-region beg end)
+                        (insert response)
+                        (set-marker beg nil)
+                        (set-marker end nil)
+                        (message "Rewrote line. Original line saved to kill-ring.")))))
+                ))
 
 (defun gptel-rewrite-and-replace (bounds &optional directive)
   (interactive
@@ -33,14 +52,118 @@
      (t (cons (line-beginning-position) (line-end-position))))
     (read-string "write good code.")))
   (gptel-request
-   (buffer-substring-no-properties (car bounds) (cdr bounds)) ;the prompt
-   :system (or directive "only best code. ty.")
-   :buffer (current-buffer)
-   :context (cons (set-marker (make-marker) (car bounds))
-                  (set-marker (make-marker) (cdr bounds)))
-   :callback mydick))
+      (buffer-substring-no-properties (car bounds) (cdr bounds)) ;the prompt
+    :system (or directive "only best code. ty.")
+    :buffer (current-buffer)
+    :context (cons (set-marker (make-marker) (car bounds))
+                   (set-marker (make-marker) (cdr bounds)))
+    :callback mydick))
 
 (global-set-key (kbd "C-\\") 'gptel-rewrite-and-replace)
+
+(when (eq system-type 'darwin) ;; mac specific settings
+  (setq mac-option-modifier 'alt)
+  (setq mac-command-modifier 'meta)
+  (global-set-key [kp-delete] 'delete-char) ;; sets fn-delete to be right-delete
+  )
+
+
+(defun my-block-saving-in-org-mode ()
+ "Prevent saving in Org mode."
+ (when (eq major-mode 'org-mode)
+   (error "Saving is blocked in Org mode")))
+
+(defun enable-block-saving-in-org-mode ()
+ "Enable blocking of saving in Org mode."
+ (add-hook 'before-save-hook 'my-block-saving-in-org-mode))
+
+(defun disable-block-saving-in-org-mode ()
+ "Disable blocking of saving in Org mode."
+ (remove-hook 'before-save-hook 'my-block-saving-in-org-mode))
+
+(enable-block-saving-in-org-mode)
+                                       ;https://github.com/rejeep/prodigy.el
+(global-set-key (kbd "C-.") (lambda ()
+                             (interactive)
+                             (find-file "~/.config/doom/config.el")))
+
+;;(global-set-key (kbd "C-!") 'eshell)
+;; (global-set-key (kbd "C-$") 'eshell)
+;; (global-set-key (kbd "C-^") 'eshell)
+;; (global-set-key (kbd "C-*") 'eshell)
+;; (global-set-key (kbd "C-)") 'eshell)
+;; (global-set-key (kbd "C-}") 'eshell)
+;; (global-set-key (kbd "C-\"") 'eshell)
+;; (global-set-key (kbd "C-,") 'eshell)
+;; (global-set-key (kbd "C-<") 'eshell)
+;; (global-set-key (kbd "C->") 'eshell)
+;; (global-set-key (kbd "C-#") 'eshell)
+;; (global-set-key (kbd "C-%") 'eshell)
+;; (global-set-key (kbd "C-&") 'eshell)
+;; (global-set-key (kbd "C-(") 'eshell)
+;; (global-set-key (kbd "C-{") 'eshell)
+;; (global-set-key (kbd "C-:") 'eshell)
+;; (global-set-key (kbd "C-|") 'eshell)
+;;https://discourse.doomemacs.org/t/why-is-emacs-doom-slow/83/3
+
+(global-set-key (kbd "s-b") 'backward-word)
+
+(global-set-key (kbd "C-c SPC") 'eshell)
+(global-set-key (kbd "M-v") 'scroll-down-command)
+(global-set-key (kbd "s-v") 'scroll-down-command)
+(defun my-kill-region-or-backward-word ()
+  "If a region is active and non-empty, kill the region. Otherwise, kill the word backward."
+  (interactive)
+  (if (use-region-p)
+      (kill-region (region-beginning) (region-end))
+    (backward-kill-word 1)))
+
+
+  ;; (setq org-modern-star '("◉" "○" "◈" "◇" "*"))
+
+;; (setq
+;;  ;; Edit settings
+;;  org-auto-align-tags nil
+;;  org-tags-column 0
+;;  org-catch-invisible-edits 'show-and-error
+;;  org-special-ctrl-a/e t
+;;  org-insert-heading-respect-content t
+
+;;  ;; Org styling, hide markup etc.
+;;  org-hide-emphasis-markers t
+;;  org-pretty-entities t
+;;  org-ellipsis "…"
+
+;;  ;; Agenda styling
+;;  org-agenda-tags-column 0
+;;  org-agenda-block-separator ?─
+;;  org-agenda-time-grid
+;;  '((daily today require-timed)
+;;    (800 1000 1200 1400 1600 1800 2000)
+;;    " ┄┄┄┄┄ " "┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄")
+;;  org-agenda-current-time-string
+;;  "⭠ now ─────────────────────────────────────────────────")
+
+;; ;; Global
+;; (global-org-modern-mode)
+
+
+
+
+;; (use-package! gptel
+;;   :config
+;;   (setq! gptel-api-key "sk-proj-Hmuqqnv6LyOuPwyoHwJgT3BlbkFJCeCujBnkIg9pAbO6K5rT")
+;;   )
+;;                                         ;List of models
+;;                                         ;
+;; ;; OPTIONAL configuration
+;; (setq
+;;  gptel-model "mistral:latest"
+;;  gptel-backend (gptel-make-ollama "Ollama"
+;;                  :host "localhost:11434"
+;;                  :stream t
+;;                  :models '("mistral:latest")))
+
 
 ;; [
 ;;  "Write the next paragraph",
@@ -96,128 +219,39 @@
 ;;     "Custom AI block"
 ;; ]
 
+;; (use-package codeium
+;;   ;; if you use straight
+;;   ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
+;;   ;; otherwise, make sure that the codeium.el file is on load-path
+;;   :init
+;;   (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
+;;   :config
+;;   (setq use-dialog-box nil) ;; do not use popu
+;;   ;;
+;;   (setq codeium-mode-line-enable
+;;         (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
+;;   (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
 
-(defun my-block-saving-in-org-mode ()
+;;   (setq codeium-api-enabled
+;;         (lambda (api)
+;;           (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
+;;   ;; you can also set a config for a single buffer like this:
+;;   ;; (add-hook 'python-mode-hook
+;;   ;;     (lambda ()
+;;   ;;         (setq-local codeium/editor_options/tab_size 4)))
 
-
-
-  "Prevent saving in Org mode."
-  (when (eq major-mode 'org-mode)
-    (error "Saving is blocked in Org mode")))
-
-(defun enable-block-saving-in-org-mode ()
-  "Enable blocking of saving in Org mode."
-  (add-hook 'before-save-hook 'my-block-saving-in-org-mode))
-
-(defun disable-block-saving-in-org-mode ()
-  "Disable blocking of saving in Org mode."
-  (remove-hook 'before-save-hook 'my-block-saving-in-org-mode))
-;; Enable blocking by default
-(enable-block-saving-in-org-mode)
-;https://github.com/rejeep/prodigy.el
-(global-set-key (kbd "C-.") (lambda ()
-                              (interactive)
-                              (find-file "~/.config/doom/config.el")))
-;;(global-set-key (kbd "C-!") 'eshell)
-;; (global-set-key (kbd "C-$") 'eshell)
-;; (global-set-key (kbd "C-^") 'eshell)
-;; (global-set-key (kbd "C-*") 'eshell)
-;; (global-set-key (kbd "C-)") 'eshell)
-;; (global-set-key (kbd "C-}") 'eshell)
-;; (global-set-key (kbd "C-\"") 'eshell)
-;; (global-set-key (kbd "C-,") 'eshell)
-;; (global-set-key (kbd "C-<") 'eshell)
-;; (global-set-key (kbd "C->") 'eshell)
-;; (global-set-key (kbd "C-#") 'eshell)
-;; (global-set-key (kbd "C-%") 'eshell)
-;; (global-set-key (kbd "C-&") 'eshell)
-;; (global-set-key (kbd "C-(") 'eshell)
-;; (global-set-key (kbd "C-{") 'eshell)
-;; (global-set-key (kbd "C-:") 'eshell)
-;; (global-set-key (kbd "C-|") 'eshell)
-;;
-;;\
-;;.
-;;https://discourse.doomemacs.org/t/why-is-emacs-doom-slow/83/3
-(global-set-key (kbd "s-b") 'backward-word)
-
-(global-set-key (kbd "C-c SPC") 'eshell)
-(global-set-key (kbd "M-v") 'scroll-down-command)
-(global-set-key (kbd "s-v") 'scroll-down-command)
-(defun my-kill-region-or-backward-word ()
-  "If a region is active and non-empty, kill the region. Otherwise, kill the word backward."
-  (interactive)
-  (if (use-region-p)
-      (kill-region (region-beginning) (region-end))
-    (backward-kill-word 1)))
-
-
-
-
-
-(use-package! gptel
- :config
- (setq! gptel-api-key "sk-proj-Hmuqqnv6LyOuPwyoHwJgT3BlbkFJCeCujBnkIg9pAbO6K5rT")
- )
-                                       ;List of models
-                                        ;
-;; OPTIONAL configuration
-(setq
- gptel-model "mistral:latest"
- gptel-backend (gptel-make-ollama "Ollama"
-                 :host "localhost:11434"
-                 :stream t
-                 :models '("mistral:latest")))
-(use-package codeium
-    ;; if you use straight
-    ;; :straight '(:type git :host github :repo "Exafunction/codeium.el")
-    ;; otherwise, make sure that the codeium.el file is on load-path
-    :init
-    (add-to-list 'completion-at-point-functions #'codeium-completion-at-point)
-     :config
-    (setq use-dialog-box nil) ;; do not use popu
-    ;;
-       (setq codeium-mode-line-enable
-        (lambda (api) (not (memq api '(CancelRequest Heartbeat AcceptCompletion)))))
-    (add-to-list 'mode-line-format '(:eval (car-safe codeium-mode-line)) t)
-
-  (setq codeium-api-enabled
-        (lambda (api)
-            (memq api '(GetCompletions Heartbeat CancelRequest GetAuthToken RegisterUser auth-redirect AcceptCompletion))))
-    ;; you can also set a config for a single buffer like this:
-    ;; (add-hook 'python-mode-hook
-    ;;     (lambda ()
-    ;;         (setq-local codeium/editor_options/tab_size 4)))
-
-    ;; You can overwrite all the codeium configs!
-    ;; for example, we recommend limiting the string sent to codeium for better performance
-    (defun my-codeium/document/text ()
-        (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
-    ;; if you change the text, you should also change the cursor_offset
-    ;; warning: this is measured by UTF-8 encoded bytes
-    (defun my-codeium/document/cursor_offset ()
-        (codeium-utf8-byte-length
-            (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
-    (setq codeium/document/text 'my-codeium/document/text)
-    (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset)
-)
-(when (eq system-type 'darwin) ;; mac specific settings
-  (setq mac-option-modifier 'alt)
-  (setq mac-command-modifier 'meta)
-  (global-set-key [kp-delete] 'delete-char) ;; sets fn-delete to be right-delete
-  )
-;;console log to show init happe
-(global-set-key "\C-w" 'my-kill-region-or-backward-word)
-(global-set-key "\C-x\C-m" 'execute-extended-command)
-(global-set-key "\C-x\C-m" 'execute-extended-command)
-(global-set-key "\C-c\C-m" 'execute-extended-command)
-(global-set-key "\C-c\m" 'execute-extended-command)
-(global-set-key (kbd "C-x SPC")
-                (lambda ()
-                  (interactive)
-                  (find-file "~/Documents/fortress_of_solitude/adnan.org")))
-;//https://github.com/skangas/mentor
-; Normal Chat / Interpreter Mode
+;;   ;; You can overwrite all the codeium configs!
+;;   ;; for example, we recommend limiting the string sent to codeium for better performance
+;;   (defun my-codeium/document/text ()
+;;     (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (min (+ (point) 1000) (point-max))))
+;;   ;; if you change the text, you should also change the cursor_offset
+;;   ;; warning: this is measured by UTF-8 encoded bytes
+;;   (defun my-codeium/document/cursor_offset ()
+;;     (codeium-utf8-byte-length
+;;      (buffer-substring-no-properties (max (- (point) 3000) (point-min)) (point))))
+;;   (setq codeium/document/text 'my-codeium/document/text)
+;;   (setq codeium/document/cursor_offset 'my-codeium/document/cursor_offset)
+;;   )
 ;; toggle side buffer on cmd-k
 ;; @file, folder, code, @web, @docs, @lint, @git, @codebase
 ;; chat history
@@ -230,9 +264,9 @@
 ;;https://emacsdocs.org/docs/elisp/Processes
 ;;feel for the people that you dont
 ;;  https://github.com/copilot-emacs/copilot.el?tab=readme-ov-file
-  ;;https://github.com/ahyatt/emacs-websocket
-  ;;https://github.com/tkf/emacs-request
-  ;;https://github.com/kiwanami/emacs-deferred
+;;https://github.com/ahyatt/emacs-websocket
+;;https://github.com/tkf/emacs-request
+;;https://github.com/kiwanami/emacs-deferred
 ;;; technologoies with the power to imprss women
 ;;; robotics - cordy
 ;;; advanced LLM usage - funny jokes, memes, art - robotic planning
@@ -261,28 +295,26 @@
 ;;;great change will occur through you
 ;;;https://en.wikipedia.org/wiki/Macbeth
 ;;;In War and Peace, Leo Tolstoy wrote of the 'unconscious swarm-life of mankind', while Shakespeare spoke of a 'tide in the affairs of men' in his play Julius Caesar.
-;https://tvtropes.org/pmwiki/pmwiki.php/Characters/MarvelComicsMagneto
+                                        ;https://tvtropes.org/pmwiki/pmwiki.php/Characters/MarvelComicsMagneto
 ;;"I am no hero. Merely a man who has seen and done and endured what can never be forgotten or forgiven."
-;Only my actions... what I do in the name of all mutants... hold any real meaning."
-;
-;actions hace meaning, words do not
-;https://en.wikipedia.org/wiki/Will_to_power
-;https://en.wikipedia.org/wiki/Free_will
-;https://tvtropes.org/pmwiki/pmwiki.php/Quotes/TimeMaster
-;"...Heed my words. I am Malenia, Blade of Miquella. And I have never known defeat."
+                                        ;Only my actions... what I do in the name of all mutants... hold any real meaning."
+                                        ;
+                                        ;actions hace meaning, words do not
+                                        ;https://en.wikipedia.org/wiki/Will_to_power
+                                        ;https://en.wikipedia.org/wiki/Free_will
+                                        ;https://tvtropes.org/pmwiki/pmwiki.php/Quotes/TimeMaster
+                                        ;"...Heed my words. I am Malenia, Blade of Miquella. And I have never known defeat."
 
-;https://tvtropes.org/pmwiki/pmwiki.php/Main/TheAtoner
- ;;use GPT-0 to create training data for qwen2, cotinously efery sdefond?
- ;;how much bandwith
- ;;why did i spend 7 hours doing nothing
- ;;SMH
- ;;He who controls the past commands the future. He who commands the future, conquers the past.
- ;;perception + detection
- ;;jensesn huang,
- ;;start time, uptime, utilziation
- ;;
-
-
+                                        ;https://tvtropes.org/pmwiki/pmwiki.php/Main/TheAtoner
+;;use GPT-0 to create training data for qwen2, cotinously efery sdefond?
+;;how much bandwith
+;;why did i spend 7 hours doing nothing
+;;SMH
+;;He who controls the past commands the future. He who commands the future, conquers the past.
+;;perception + detection
+;;jensesn huang,
+;;start time, uptime, utilziation
+;;
 
 
 
@@ -297,7 +329,9 @@
 
 
 
- ;;valdman, palmer luckey, tom preston werner, jesse , bret victor, and many more
+
+
+;;valdman, palmer luckey, tom preston werner, jesse , bret victor, and many more
 
 ;; homelab / emacs / ff
 ;;;
@@ -315,7 +349,7 @@
 ;; i never beleieved in anything, just you
 ;; In psychology, this trait is called "resilience". People who are very resilient can come back from major losses and get through extremely tough times without permanent effects.
 
-; https://tvtropes.org/pmwiki/pmwiki.php/Main/Determinator
+                                        ; https://tvtropes.org/pmwiki/pmwiki.php/Main/Determinator
 ;; resillient, rate of learning, action
 ;; https://tvtropes.org/pmwiki/pmwiki.php/Main/HeroicResolve
 ;; https://tvtropes.org/pmwiki/pmwiki.php/Main/WorthLivingFor
@@ -384,7 +418,7 @@
 ;;     ;;         (setq-local completion-at-point-functions
 ;;     ;;             (list (cape-super-capf #'codeium-completion-at-point #'lsp-completion-at-point)))))
 ;;     ;; an async company-backend is coming soon!
-= 374 ;;   }'
+;;   }'
 ;;     ;; codeium-completion-at-point is autoloaded, but you can
 ;;     ;; optionally set a timer, which might speed up things as the
 ;;     ;; codeium local language server takes ~0.2s to start up
@@ -440,17 +474,17 @@
 ;;         ;; also get a drop down
 ;;         ;; company-frontends '(company-pseudo-tooltip-frontend company-preview-frontend)
 ;;         ))
-= 374 ;;   }'
+;;   }'
 
 ;;use any text buffer on your computer as an emacs buffer -> forgot how
 ;;
 ;;
 ;;
                                         ;* RETOOL
-;* CUSTOMER.io
-;https://developer.hashicorp.com/vagrant/tutorials/getting-started
-;https://github.com/bregman-arie/devops-exercises/tree/master?tab=readme-ov-file#virtualization
-;https://github.com/machyve/xhyve
+                                        ;* CUSTOMER.io
+                                        ;https://developer.hashicorp.com/vagrant/tutorials/getting-started
+                                        ;https://github.com/bregman-arie/devops-exercises/tree/master?tab=readme-ov-file#virtualization
+                                        ;https://github.com/machyve/xhyve
 ;; neural network plumbing
 ;; DOOMEMACS and DevOps Tutor
 ;; Ycombinator - BUSINESS = talking to USERS - UI/UX/TOOLS
@@ -577,8 +611,8 @@
 
 
 
-;(global-set-key "\C-x\C-k" 'kill-region)
-;(global-set-key "\C-c\C-k" 'kill-region)
+                                        ;(global-set-key "\C-x\C-k" 'kill-region)
+                                        ;(global-set-key "\C-c\C-k" 'kill-region)
 
 ;; (defun my-kill-region-or-backward-word ()
 ;;   "If a region is active and non-empty, kill the region. Otherwise, kill the word backward."
@@ -651,7 +685,7 @@
 ;;leave lifetime at 8
 ;;815
 
-;(global-set-key "\M-b" 'backward-kill-word)
+                                        ;(global-set-key "\M-b" 'backward-kill-word)
 ;; Automatically open all Markdown files as Org files
 
 
@@ -662,7 +696,7 @@
 ;;C++ dev
 ;;;;android + kotlin ? lol
 
-;https://www.reddit.com/r/emacs/comments/13god8v/how_do_i_improve_emacs_as_a_typescript_ide/
+                                        ;https://www.reddit.com/r/emacs/comments/13god8v/how_do_i_improve_emacs_as_a_typescript_ide/
 ;;https://www.reddit.com/r/emacs/comments/13z8i1a/typescript_highlighting_in_emacs_incomplete/
 ;;https://www.reddit.com/r/emacs/comments/mgbejx/webmacs_new_emacs_configuration_for_web/
 ;; (global-set-key [(meta v)] 'revert-buffer-no-confirm) ;
@@ -671,7 +705,7 @@
 ;; (global-set-key (kbd "M-i") 'gofmt)
 
 
-;https://news.ycombinator.com/item?id=9600106
+                                        ;https://news.ycombinator.com/item?id=9600106
 ;;https://github.com/WeAreWizards/blog/blob/master/content/articles/ansible-and-nix.md
 ;;
 ;;
@@ -679,8 +713,8 @@
 ;;prettier.js
 
 
-;(add-to-list 'auto-mode-alist '("\\.jsx?$" . rjsx-mode))
-;(add-to-list 'auto-mode-alist '("\\.tsx?$" . typescript-mode))
+                                        ;(add-to-list 'auto-mode-alist '("\\.jsx?$" . rjsx-mode))
+                                        ;(add-to-list 'auto-mode-alist '("\\.tsx?$" . typescript-mode))
 
 
 ;;; Setup TypeScript Interactive Development Environment
@@ -699,16 +733,16 @@
 
 
 ;;init.el
-;:lang
+                                        ;:lang
 ;;(prettier +onsave)
-;(typescript +lsp)
-;:lang
-;(web +lsp)
-;
+                                        ;(typescript +lsp)
+                                        ;:lang
+                                        ;(web +lsp)
+                                        ;
 ;;;emmet mode?
 ;;https://zzamboni.org/post/my-doom-emacs-configuration-with-commentary/
-;describe bindings
-;
+                                        ;describe bindings
+                                        ;
 ;;;; free-keys.el --- Show free keybindings for modkeys or prefixes
 
 ;; Copyright (C) 2013 Matus Goljer
@@ -862,88 +896,88 @@
 ;; use usage statistics to determine which parts of emacs are legacy cruft
 
 
-(require 'json)
-(require 'cl-lib)
-(require 'url)
+;; (require 'json)
+;; (require 'cl-lib)
+;; (require 'url)
 
-(defgroup ollama nil
-  "Ollama client for Emacs."
-  :group 'ollama)
-;;* POSIX Pipes or FIFOs:
-;;how much is the ollama overhead
-;;qwen2 deepseek-v2
-(defcustom ollama:endpoint "http://localhost:11434/api/generate"
-  "Ollama http service endpoint."
-  :group 'ollama
-  :type 'string)
+;; (defgroup ollama nil
+;;   "Ollama client for Emacs."
+;;   :group 'ollama)
+;; ;;* POSIX Pipes or FIFOs:
+;; ;;how much is the ollama overhead
+;; ;;qwen2 deepseek-v2
+;; (defcustom ollama:endpoint "http://localhost:11434/api/generate"
+;;   "Ollama http service endpoint."
+;;   :group 'ollama
+;;   :type 'string)
 
-(defcustom ollama:model "llama2-uncensored"
-  "Ollama model."
-  :group 'ollama
-  :type 'string)
+;; (defcustom ollama:model "llama2-uncensored"
+;;   "Ollama model."
+;;   :group 'ollama
+;;   :type 'string)
 
-(defcustom ollama:language "Chinese"
-  "Language to translate to."
-  :group 'ollama
-  :type 'string)
+;; (defcustom ollama:language "Chinese"
+;;   "Language to translate to."
+;;   :group 'ollama
+;;   :type 'string)
 
-(defun ollama-fetch (url prompt model)
-  (let* ((url-request-method "POST")
-         (url-request-extra-headers
-          '(("Content-Type" . "application/json")))
-         (url-request-data
-          (encode-coding-string
-           (json-encode `((model . ,model) (prompt . ,prompt)))
-           'utf-8)))
-    (with-current-buffer (url-retrieve-synchronously url)
-      (goto-char url-http-end-of-headers)
-      (decode-coding-string
-       (buffer-substring-no-properties
-        (point)
-        (point-max))
-       'utf-8))))
+;; (defun ollama-fetch (url prompt model)
+;;   (let* ((url-request-method "POST")
+;;          (url-request-extra-headers
+;;           '(("Content-Type" . "application/json")))
+;;          (url-request-data
+;;           (encode-coding-string
+;;            (json-encode `((model . ,model) (prompt . ,prompt)))
+;;            'utf-8)))
+;;     (with-current-buffer (url-retrieve-synchronously url)
+;;       (goto-char url-http-end-of-headers)
+;;       (decode-coding-string
+;;        (buffer-substring-no-properties
+;;         (point)
+;;         (point-max))
+;;        'utf-8))))
 
-(defun ollama-get-response-from-line (line)
-  (cdr
-   (assoc 'response
-          (json-read-from-string line))))
+;; (defun ollama-get-response-from-line (line)
+;;   (cdr
+;;    (assoc 'response
+;;           (json-read-from-string line))))
 
-(defun ollama-prompt (url prompt model)
-  (mapconcat 'ollama-get-response-from-line
-             (cl-remove-if #'(lambda (str) (string= str ""))
-                        (split-string (ollama-fetch url prompt model) "\n")) ""))
+;; (defun ollama-prompt (url prompt model)
+;;   (mapconcat 'ollama-get-response-from-line
+;;              (cl-remove-if #'(lambda (str) (string= str ""))
+;;                         (split-string (ollama-fetch url prompt model) "\n")) ""))
 
-;;;###autoload
-(defun ollama-prompt-line ()
-  "Prompt with current word."
-  (interactive)
-  (with-output-to-temp-buffer "*ollama*"
-    (princ
-     (ollama-prompt ollama:endpoint (thing-at-point 'line) ollama:model))))
+;; ;;;###autoload
+;; (defun ollama-prompt-line ()
+;;   "Prompt with current word."
+;;   (interactive)
+;;   (with-output-to-temp-buffer "*ollama*"
+;;     (princ
+;;      (ollama-prompt ollama:endpoint (thing-at-point 'line) ollama:model))))
 
-;;;###autoload
-(defun ollama-define-word ()
-  "Find definition of current word."
-  (interactive)
-  (with-output-to-temp-buffer "*ollama*"
-    (princ
-     (ollama-prompt ollama:endpoint (format "define %s" (thing-at-point 'word)) ollama:model))))
+;; ;;;###autoload
+;; (defun ollama-define-word ()
+;;   "Find definition of current word."
+;;   (interactive)
+;;   (with-output-to-temp-buffer "*ollama*"
+;;     (princ
+;;      (ollama-prompt ollama:endpoint (format "define %s" (thing-at-point 'word)) ollama:model))))
 
-;;;###autoload
-(defun ollama-translate-word ()
-  "Translate current word."
-  (interactive)
-  (with-output-to-temp-buffer "*ollama*"
-    (princ
-     (ollama-prompt ollama:endpoint (format "translate \"%s\" to %s" (thing-at-point 'word) ollama:language) ollama:model))))
+;; ;;;###autoload
+;; (defun ollama-translate-word ()
+;;   "Translate current word."
+;;   (interactive)
+;;   (with-output-to-temp-buffer "*ollama*"
+;;     (princ
+;;      (ollama-prompt ollama:endpoint (format "translate \"%s\" to %s" (thing-at-point 'word) ollama:language) ollama:model))))
 
-;;;###autoload
-(defun ollama-summarize-region ()
-   "Summarize marked text."
-  (interactive)
-  (with-output-to-temp-buffer "*ollama*"
-    (princ
-     (ollama-prompt ollama:endpoint (format "summarize \"\"\"%s\"\"\"" (buffer-substring (region-beginning) (region-end))) ollama:model))))
+;; ;;;###autoload
+;; (defun ollama-summarize-region ()
+;;    "Summarize marked text."
+;;   (interactive)
+;;   (with-output-to-temp-buffer "*ollama*"
+;;     (princ
+;;      (ollama-prompt ollama:endpoint (format "summarize \"\"\"%s\"\"\"" (buffer-substring (region-beginning) (region-end))) ollama:model))))
 
 ;; //dhh+omakub@hey.com
 ;; https://www.braintrust.dev/docs/guides/self-hosting
@@ -1035,35 +1069,33 @@
 ;;bend the arc of time
 ;;steins gate
 ;;future diary
-;Transcendence
-;https://en.wikipedia.org/wiki/Causality_(physics);;"To know sorrow is not terrifying. What is terrifying is to know you can't go back to happiness you could have."
-;
-;
-;time magic
-;illusion magic
-;https://en.wikipedia.org/wiki/Closed_timelike_curve
-;repercussions
-;irreverisble
-;causality
-;convergence
-;https://en.wikipedia.org/wiki/The_Rise_and_Fall_of_D.O.D.O.
-;paradox
-;tautology
-;minority report - precog
-;avalanche
-;chain reaxtion
-;dominoes
-;
-;https://en.wikipedia.org/wiki/Representativeness_heuristic
-;riples
-;snowball
-;traffic congestion
-;nowba
-;https://en.wikipedia.org/wiki/Chain_reaction
-;https://en.wikipedia.org/wiki/Domino_effect
-;https://en.wikipedia.org/wiki/Mathematical_induction
-;systemds thinkfing
-;https://en.wikipedia.org/wiki/Dynamical_system
-;https://en.wikipedia.org/wiki/Positive_feedback
-
-
+                                        ;Transcendence
+                                        ;https://en.wikipedia.org/wiki/Causality_(physics);;"To know sorrow is not terrifying. What is terrifying is to know you can't go back to happiness you could have."
+                                         ;
+                                        ;
+                                        ;time magic
+                                        ;illusion magic
+                                        ;https://en.wikipedia.org/wiki/Closed_timelike_curve
+                                        ;repercussions
+                                        ;irreverisble
+                                        ;causality
+                                        ;convergence
+                                        ;https://en.wikipedia.org/wiki/The_Rise_and_Fall_of_D.O.D.O.
+                                        ;paradox
+                                        ;tautology
+                                        ;minority report - precog
+                                        ;avalanche
+                                        ;chain reaxtion
+                                        ;dominoes
+                                        ;
+                                        ;https://en.wikipedia.org/wiki/Representativeness_heuristic
+                                        ;riples
+                                        ;snowball
+                                        ;traffic congestion
+                                        ;nowba
+                                        ;https://en.wikipedia.org/wiki/Chain_reaction
+                                        ;https://en.wikipedia.org/wiki/Domino_effect
+                                        ;https://en.wikipedia.org/wiki/Mathematical_induction
+                                        ;systemds thinkfing
+                                        ;https://en.wikipedia.org/wiki/Dynamical_system
+                                        ;https://en.wikipedia.org/wiki/Positive_feedback
