@@ -58,17 +58,8 @@
 ;; (package! org-projectile)
 ;; (package! org-ql)
 ;; (package! org-rich-yank)
-(package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
+;(package! codeium :recipe (:host github :repo "Exafunction/codeium.el"))
 (package! gptel)
-(use-package atomic-chrome
-  :demand t
-  :straight (atomic-chrome
-             :repo "KarimAziev/atomic-chrome"
-             :type git
-             :flavor nil
-             :host github)
-  :commands (atomic-chrome-start-server)
-  :config (atomic-chrome-start-server))
-(add-to-list 'load-path "~/.emacs.d/atomic-chrome/")
-(require 'atomic-chrome)
-(atomic-chrome-start-server)
+;(add-to-list 'load-path "~/.emacs.d/atomic-chrome/")
+;(require 'atomic-chrome)
+;(atomic-chrome-start-server)

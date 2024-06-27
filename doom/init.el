@@ -14,9 +14,9 @@
  ;;      Alternatively, press 'gd' (or 'C-c c d') on a module to browse its
  ;;      directory (for easy access to its source code). (:if (featurep :system 'macos) macos)
  (doom! :editor ;     ; come to the dark side, we have cookies ;;https://discourse.doomemacs.org/t/example-user-configurations/38
-        ;; (if t
-        ;;;     (evil +everywhere)
-        ;;   )
+
+;            (evil +everywhere)
+
         file-templates    ; auto-snippets for empty files
         fold              ; (nigh) universal code folding
                                          ;       (format +onsave)  ; automated prettiness
